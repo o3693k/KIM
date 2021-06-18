@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding//src/main/webapp/WEB-INF/views/article/list.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/article/modify.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/article/read.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/article/write.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/home.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/include/left_column.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/reply/reply_test.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/user/profile.jsp=UTF-8
