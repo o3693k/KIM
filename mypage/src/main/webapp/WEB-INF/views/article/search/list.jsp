@@ -150,30 +150,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- REQUIRED SCRIPTS -->
 <%@ include file="../../include/plugin_js.jsp" %>
-
-<script id="replyTemplate" type="text/x-handlebars-template"> 
-	{{#each.}} 
-		<div class="post replyDiv" data-reply_no={{reply_no}}> 
-			<div class="user-block"> 
-				<img class="img-circle img-bordered-sm" src="${path}/dist/img/user1-128x128.jpg" alt="user image"> 
-				<span class="username"> 
-					<a href="#">{{reply_writer}}</a> {{#eqReplyWriter reply_writer}} 
-					<a href="#" class="float-right btn-box-tool replyDelBtn" data-toggle="modal" data-target="#delModal"> 
-						<i class="fa fa-times"> 삭제</i> 
-					</a> 
-					<a href="#" class="float-right btn-box-tool replyModBtn" data-toggle="modal" data-target="#modModal"> 
-						<i class="fa fa-edit"> 수정</i> 
-					</a> 
-							{{/eqReplyWriter}} 
-				</span> 
-				<span class="description">{{prettifyDate reg_date}}</span> 
-			</div> 
-			<div class="oldReplyText">{{reply_text}}</div> 
-			<br/> 
-	</div> 
-	{{/each}} 
-</script>
-
 <script>
 $(document).ready(function(){
 	var result = "${msg}";

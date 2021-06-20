@@ -9,3 +9,6 @@
 <script src="${path}/dist/js/adminlte.min.js"></script>
 <!-- HandleBars JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+ <script src="/mypage/resources/plugins/datatables/jquery.dataTables.min.js"></script>
+ <script src="/mypage/resources/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

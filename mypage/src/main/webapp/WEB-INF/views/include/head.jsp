@@ -26,6 +26,7 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <!-- lightbox -->
   <link rel="stylesheet" href="${path}/plugins/ekko-lightbox/ekko-lightbox.css">
+ 
 
 </head>
 

@@ -39,7 +39,7 @@ public class ReplyServiceImpl implements ReplyService {
 	public void removeReply(Integer reply_no) throws Exception {
 		int article_no = replyDAO.getArticleNo(reply_no); // 댓글의 게시물 번호 조회
 		replyDAO.delete(reply_no); // 댓글삭제
-		articleDAO.updateReplyCnt(article_no, -1); // 댓글 갯수 감소
+		articleDAO.updateReplyCnt(reply_no, -1); // 댓글 갯수 감소
 	}
 
 	@Override

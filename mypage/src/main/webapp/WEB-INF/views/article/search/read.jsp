@@ -117,7 +117,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</form> 
 						</c:if> 
 						<c:if test="${empty login}"> 
-							<a href="${path}/user/login" class="btn btn-default btn-block" role="button"> <i class="fa fa-edit"></i> 로그인 한 사용자만 댓글 등록이 가능합니다. </a> 
+							<a href="${path}/user/login" class="btn btn-default btn-block" role="button"> <i class="fa fa-edit">
+								</i> 로그인 한 사용자만 댓글 등록이 가능합니다. </a> 
 						</c:if> 
 						
 					
@@ -137,20 +138,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<div class="card-body repliesDiv" id="repliesDiv"> 
 				<script id="replyTemplate" type="text/x-handlebars-template"> 
 					{{#each.}} 
-						<div class="post replyDiv" data-reply_no={{reply_no}}> 
+						<div class="post replyDiv">
+							<div class="data-reply_no">{{reply_no}}</div> 
 							<div class="user-block"> 
 								<img class="img-circle img-bordered-sm" src="${path}/dist/img/user1-128x128.jpg" alt="user image"> 
 								<span class="username"> 
-									<a href="#">{{reply_writer}}</a> {{#eqReplyWriter reply_writer}} 
-									<a href="#" class="float-right btn-box-tool replyDelBtn" data-toggle="modal" data-target="#delModal"> 
+									<a href="#" class="oldwriter">{{reply_writer}}</a> {{#eqReplyWriter reply_writer}} 
+									<a href="#" class="float-right btn-box-tool replyDelBtn" data-toggle="modal" data-target="#deleteModal"> 
 										<i class="fa fa-times"> 삭제</i> 
 									</a> 
-									<a href="#" class="float-right btn-box-tool replyModBtn" data-toggle="modal" data-target="#modModal"> 
+									<a href="#" class="float-right btn-box-tool replyModBtn" data-toggle="modal" data-target="#modifyModal"> 
 										<i class="fa fa-edit"> 수정</i> 
 									</a> 
-											{{/eqReplyWriter}} 
+											{{/eqReplyWriter}}
 								</span> 
-								<span class="description">{{prettifyDate reg_date}}</span> 
+								<span class="description"></span> 
 							</div> 
 							<div class="oldReplyText">{{reply_text}}</div> 
 							<br/> 
@@ -171,6 +173,73 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			</div>
         
       </div><!-- /.container-fluid -->
+
+		<!-- ModiModal -->
+      	<div class="modal fade" id="modifyModal" role="dialog"> 
+			<div class="modal-dialog"> 
+			<!-- Modal content -->
+				<div class="modal-content"> 
+					<div class="modal-header"> 
+						<button type="button" class="close" data-dismiss="modal">&times;
+						</button> 
+					<h4 class="modal-title">댓글 수정창</h4> 
+				</div> 
+				<div class="modal-body"> 
+			<div class="form-group"> 
+			<label for="modal_modi_reply_no">댓글 번호</label> 
+				<input class="form-control" id="modal_modi_reply_no" name="reply_no" readonly> 
+					</div> 
+					<div class="form-group"> 
+						<label for="modal_modi_reply_text">댓글 내용</label> 
+						<input class="form-control" id="modal_modi_reply_text" name="reply_text" placeholder="댓글 내용을 입력해주세요"> 
+					</div> 
+					<div class="form-group"> 
+						<label for="modal_modi_reply_writer">댓글 작성자</label> 
+						<input class="form-control" id="modal_modi_reply_writer" name="reply_writer" readonly> 
+					</div> 
+					</div> 
+					<div class="modal-footer"> 
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button> 
+						<button type="button" class="btn btn-success modalModBtn">수정</button> 
+					</div> 
+				</div> 
+			</div> 
+		</div>
+		
+		<!-- DelModal -->
+		<div class="modal fade" id="deleteModal" role="dialog"> 
+			<div class="modal-dialog"> 
+			<!-- Modal content -->
+				<div class="modal-content"> 
+					<div class="modal-header"> 
+						<button type="button" class="close" data-dismiss="modal">&times;
+						</button> 
+					<h4 class="modal-title">댓글 삭제창</h4> 
+				</div> 
+				<div class="modal-body"> 
+			<div class="form-group"> 
+			<label for="modal_del_reply_no">댓글 번호</label> 
+				<input class="form-control" id="modal_del_reply_no" name="reply_no" readonly> 
+					</div> 
+					<div class="form-group"> 
+						<label for="modal_del_reply_text">댓글 내용</label> 
+						<input class="form-control" id="modal_del_reply_text" name="reply_text" readonly> 
+					</div> 
+					<div class="form-group"> 
+						<label for="modal_del_reply_writer">댓글 작성자</label> 
+						<input class="form-control" id="modal_del_reply_writer" name="reply_writer" readonly> 
+					</div> 
+					</div> 
+					<div class="modal-footer"> 
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button> 
+						<button type="button" class="btn btn-danger modalDelBtn">삭제</button> 
+					</div> 
+				</div> 
+			</div> 
+		</div>
+		
+
+		
     </div>
     <!-- /.content -->
   </div>
@@ -235,6 +304,15 @@ $(document).ready(function () {
 			$(".uploadedList").append(html); 
 		}) 
 	});
+	
+	Handlebars.registerHelper("eqReplyWriter", function (reply_writer, block) { 
+		var accum = ""; 
+		if (reply_writer === "${login.userId}") { 
+			accum += block.fn(); 
+			} 
+		return accum; 
+	});
+
 
 	
 	//댓글 내용 : 줄바꿈/공백처리
@@ -369,14 +447,22 @@ $(document).ready(function () {
 	// 댓글 수정을 위해 modal창에 선택한 댓글의 값들을 세팅 
 	$(".repliesDiv").on("click", ".replyDiv", function (event) { 
 		var reply = $(this); 
-		$(".reply_no").val(reply.attr("data-reply_no")); 
-		$("#reply_text").val(reply.find(".oldReplyText").text()); 
+		$("#modal_modi_reply_no").val(reply.find(".data-reply_no").text()); 
+		$("#modal_modi_reply_text").val(reply.find(".oldReplyText").text());
+		$("#modal_modi_reply_writer").val(reply.find(".oldwriter").text());
+		
+		$("#modal_del_reply_no").val(reply.find(".data-reply_no").text()); 
+		$("#modal_del_reply_text").val(reply.find(".oldReplyText").text());
+		$("#modal_del_reply_writer").val(reply.find(".oldwriter").text());
 	});
 	
 	// modal 창의 댓글 수정버튼 클릭 이벤트 
 	$(".modalModBtn").on("click", function () { 
-		var reply_no = $(".reply_no").val(); 
-			var reply_text = $("#reply_text").val(); 
+		var reply_no = $("#modal_modi_reply_no").val(); 
+		var reply_text = $("#modal_modi_reply_text").val();
+		console.log(reply_no);
+		console.log(reply_text);
+		
 			$.ajax({ 
 				type : "put", 
 				url : "${path}/replies/" + reply_no, 
@@ -393,7 +479,7 @@ $(document).ready(function () {
 				if (result === "modSuccess") { 
 					alert("댓글이 수정되었습니다."); 
 					getReplies("${path}/replies/" + article_no + "/" + replyPageNum); // 댓글 목록 호출 
-					$("#modModal").modal("hide"); // modal 창 닫기 
+					$("#modifyModal").modal("hide"); // modal 창 닫기 
 				} 
 			} 
 		}) 
@@ -401,7 +487,7 @@ $(document).ready(function () {
 	
 	// modal 창의 댓글 삭제버튼 클릭 이벤트 
 	$(".modalDelBtn").on("click", function () { 
-		var reply_no = $(".reply_no").val(); 
+		var reply_no = $("#modal_del_reply_no").val(); 
 		$.ajax({ 
 			type: "delete",
 			url: "${path}/replies/" + reply_no, 
@@ -415,7 +501,7 @@ $(document).ready(function () {
 				if (result === "delSuccess") { 
 					alert("댓글이 삭제되었습니다."); 
 					getReplies("${path}/replies/" + article_no + "/" + replyPageNum); // 댓글 목록 호출 
-					$("#delModal").modal("hide"); // modal 창 닫기 
+					$("#deleteModal").modal("hide"); // modal 창 닫기 
 					} 
 				} 
 			}); 
